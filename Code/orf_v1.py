@@ -39,4 +39,66 @@ def revcomp(seq):
         else: comp += b
     return comp[::-1]
 
+# Nick Lawson
+# 13JUL2025
+# ORF Finder - Version 1
+
+# List of valid stop codons
+STOP_CODONS = ['TAA', 'TAG', 'TGA']
+
+# Read the input FASTA file path that was entered earlier
+with open(fasta, 'r') as f:
+    lines = f.readlines()
+
+# Parse the FASTA records using the existing parse_fasta function
+records = parse_fasta(lines)
+
+# Create six reading frames from a given sequence
+def get_frames(seq):
+    seq = seq.upper()
+    rc = revcomp(seq)  # Get the reverse complement
+    return [
+        seq,       # Frame 1
+        seq[1:],   # Frame 2
+        seq[2:],   # Frame 3
+        rc,        # Frame 4 (reverse)
+        rc[1:],    # Frame 5 (reverse)
+        rc[2:]     # Frame 6 (reverse)
+    ]
+
+# Find all ORFs in a single reading frame
+def find_orfs(seq, frame_num, is_rev):
+    i = 0
+    results = []
+    while i <= len(seq) - 3:
+        if seq[i:i+3] == 'ATG':  # Look for start codon
+            j = i + 3
+            while j <= len(seq) - 3:
+                if seq[j:j+3] in STOP_CODONS:  # Look for stop codon
+                    orf_seq = seq[i:j+3]
+                    if len(orf_seq) >= minlen:  # Check minimum length
+                        pos = -(len(seq)-i) if is_rev else i+1
+                        results.append((frame_num, pos, len(orf_seq), orf_seq))
+                    break
+                j += 3
+            i = j
+        else:
+            i += 3
+    return results
+
+# Process all parsed sequences to find ORFs in all frames
+all_orfs = []
+for header, sequence in records:
+    frames = get_frames(sequence)
+    for n in range(6):
+        rev = n >= 3  # Reverse frames are 4, 5, 6
+        found = find_orfs(frames[n], n+1, rev)
+        for item in found:
+            all_orfs.append((header, *item))
+
+# This code chunk can be deleted. I used it to test that everythig up to this point was working.
+for orf in all_orfs:
+    print(orf)
+#
+
 
