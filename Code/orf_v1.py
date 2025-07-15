@@ -1,3 +1,4 @@
+# Tyler Maire
 # --- Get user input ---
 print("Enter FASTA file path (or '-' for manual input):")
 fasta = input("File path: ").strip().strip('"').strip("'")
