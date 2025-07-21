@@ -97,9 +97,14 @@ for header, sequence in records:
         for item in found:
             all_orfs.append((header, *item))
 
-# This code chunk can be deleted. I used it to test that everythig up to this point was working.
-for orf in all_orfs:
-    print(orf)
-#
+#Naziha James
+if all_orfs:
+    print("\nFound ORFs:")
+    for header, frame, start, length, orf_seq in all_orfs:
+        direction = "Reverse" if frame > 3 else "Forward"
+        print(f">{header} | Frame {frame} ({direction}) | Start: {start} | Length: {length}")
+        print(orf_seq)
+else:
+    print("No ORFs found.")
 
 
