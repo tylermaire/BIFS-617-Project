@@ -98,6 +98,14 @@ for header, sequence in records:
             all_orfs.append((header, *item))
 
 #Naziha James
+def format_fasta_sequence(seq, codons_per_line=15):
+    fromatted_lines = []
+    for i in range(0, len(seq), codons_per_line *3):
+        chunk = seq[i:i + codons_per_line * 3]
+        codon_spaced = ' '.join([chunk[j:j+3] for j in range(0, len(chunk), 3)])
+        formatted_lines.append(codon_spaced)
+    return '\n'.join(formatted_lines)
+    
 if all_orfs:
     print("\nFound ORFs:")
     for header, frame, start, length, orf_seq in all_orfs:
