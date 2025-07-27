@@ -99,7 +99,7 @@ for header, sequence in records:
 
 #Naziha James
 def format_fasta_sequence(seq, codons_per_line=15):
-    fromatted_lines = []
+    formatted_lines = []
     for i in range(0, len(seq), codons_per_line *3):
         chunk = seq[i:i + codons_per_line * 3]
         codon_spaced = ' '.join([chunk[j:j+3] for j in range(0, len(chunk), 3)])
