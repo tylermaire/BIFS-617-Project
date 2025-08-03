@@ -98,21 +98,22 @@ for header, sequence in records:
             all_orfs.append((header, *item))
 
 #Naziha James
+#defining function to format the sequence into multiple lines
 def format_fasta_sequence(seq, codons_per_line=15):
-    formatted_lines = []
-    for i in range(0, len(seq), codons_per_line *3):
-        chunk = seq[i:i + codons_per_line * 3]
-        codon_spaced = ' '.join([chunk[j:j+3] for j in range(0, len(chunk), 3)])
-        formatted_lines.append(codon_spaced)
+    formatted_lines = []#empty list to store the lines
+    for i in range(0, len(seq), codons_per_line *3):#loops through the sequence based on the number of codons
+        chunk = seq[i:i + codons_per_line * 3]#adding a space and *3 accounts for the three nucleotides per codon 
+        codon_spaced = ' '.join([chunk[j:j+3] for j in range(0, len(chunk), 3)])#appending formatted chunk
+        formatted_lines.append(codon_spaced)#joining formatted lines together
     return '\n'.join(formatted_lines)
     
-if all_orfs:
-    print("\nFound ORFs:")
-    for header, frame, start, length, orf_seq in all_orfs:
-        direction = "Reverse" if frame > 3 else "Forward"
-        print(f">{header} | Frame {frame} ({direction}) | Start: {start} | Length: {length}")
+if all_orfs:#checking if all_orfs is empty
+    print("\nFound ORFs:")#if ORFS have been found 
+    for header, frame, start, length, orf_seq in all_orfs:#iterating through each ORF
+        direction = "Reverse" if frame > 3 else "Forward"#determining direction based on the frame number
+        print(f">{header} | Frame {frame} ({direction}) | Start: {start} | Length: {length}")#format
         print(orf_seq)
-else:
+else:#if no ORFS are found, else is executed
     print("No ORFs found.")
 
 
